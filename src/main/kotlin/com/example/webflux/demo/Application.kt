@@ -5,17 +5,20 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
 import org.springframework.web.reactive.config.EnableWebFlux
+import org.springframework.web.reactive.function.server.*
 
 @SpringBootApplication
 @EnableWebFlux
 class Application {
-    /**
-     * 참고 사이트
-     * https://m.blog.naver.com/PostView.nhn?blogId=dg110&logNo=221347127351&proxyReferer=https:%2F%2Fwww.google.com%2F
-     */
+
     @Bean
     fun helloHandler(): HelloHandler {
         return HelloHandler()
+    }
+
+    @Bean
+    fun helloRouterFunction(helloHandler: HelloHandler): RouterFunction<ServerResponse> {
+        return RouterFunctions.route(RequestPredicates.path("/"), helloHandler::handleRequest)
     }
 }
 
